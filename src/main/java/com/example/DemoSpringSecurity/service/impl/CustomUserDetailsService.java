@@ -29,6 +29,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .map((role) -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
 
+        // Sửa lại cách in quyền hạn
+        System.out.println("Quyền hạn: " + authorities);
+
         return new org.springframework.security.core.userdetails.User( // Tạo một đối tượng User từ Spring Security chứa các thông tin Tên người dùng hoặc email, Mật khẩu của người dùng đã được mã hóa, Danh sách các quyền (roles) của người dùng
                 usernameOrEmail,
                 user.getPassword(),

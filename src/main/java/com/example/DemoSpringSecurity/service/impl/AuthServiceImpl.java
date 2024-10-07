@@ -12,11 +12,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Collections;
 
 @Service
@@ -40,6 +42,9 @@ public class AuthServiceImpl implements AuthService {
 
             // Lưu trữ thông tin xác thực này vào SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // In ra quyền của người dùng
+            printUserAuthorities(authentication); // Gọi phương thức in ra quyền của người dùng
 
             // Tạo và trả về token
             return jwtTokenProvider.generateToken(authentication);
@@ -78,5 +83,19 @@ public class AuthServiceImpl implements AuthService {
 
         // Bạn có thể chọn trả về token ngay lập tức hoặc trả về thông báo thành công
         return "User registered successfully!";
+    }
+
+
+    // Phương thức để in quyền của người dùng
+    private void printUserAuthorities(Authentication authentication) {
+        if (authentication != null) {
+            // Lấy quyền của người dùng
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+            // In ra các quyền
+            authorities.forEach(authority -> System.out.println("quyền của người dùng:" + authority.getAuthority()));
+        } else {
+            System.out.println("No authentication found");
+        }
     }
 }
